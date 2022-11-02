@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Hiroki's Portfolio",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // primarySwatch: Colors.white,
         textTheme: GoogleFonts.sawarabiMinchoTextTheme(
-      Theme.of(context).textTheme,
-    ),
+          Theme.of(context).textTheme,
+        ),
       ),
       home: const PortfolioPage(),
     );
@@ -29,8 +29,21 @@ class PortfolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("ヒロキのポートフォリオ"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+
+              ],
+            ),
+            Row(
+              children: [
+                
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
