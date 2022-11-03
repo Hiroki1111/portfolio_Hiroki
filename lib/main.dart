@@ -32,14 +32,54 @@ class PortfolioPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
+            // ヘッダー
+            Column(
               children: [
-
+                Row(
+                  children: const [
+                    Text('ロゴ'),
+                    Text('アイコン'),
+                    Text('アイコン'),
+                  ],
+                ),
+                Row(
+                  children: const [
+                    Text('About'),
+                    Text('Creates'),
+                  ],
+                ),
               ],
             ),
-            Row(
+
+            // About
+            Column(
               children: [
-                
+                const Text('About'),
+                Row(
+                  children: [
+                    const Text('写真'),
+                    Column(
+                      children: const [
+                        Text('○○○○'),
+                        Text('○○○○'),
+                        Text('○○○○'),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+            // Creates
+            Column(
+              children: [
+                const Text('Creates'),
+                Row(
+                  children: const [
+                    Text('スクリーンショット'),
+                    Text('スクリーンショット'),
+                  ],
+                ),
               ],
             ),
           ],
