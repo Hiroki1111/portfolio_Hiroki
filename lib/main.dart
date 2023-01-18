@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -53,7 +55,7 @@ class PortfolioPage extends StatelessWidget {
               ),
               Image.asset(
                 'assets/images/profile_image.png',
-                width: 500,
+                width: 400,
               ),
               Column(
                 children: const [
@@ -90,47 +92,52 @@ class PortfolioPage extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    const Text(
-                      "じゃんけん",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    const SizedBox(
+                      height: 50,
                     ),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () async {
-                          await launchUrlString(
-                              "https://github.com/Hiroki1111/janken");
-                        },
-                        child: Image.asset(
-                          'assets/images/janken_image.png',
-                          // width: 600,
-                          height: 600,
-                        ),
+                    InkWell(
+                      onTap: () {
+                        launchUrlString("https://github.com/Hiroki1111/janken");
+                      },
+                      child: const Text(
+                        "じゃんけん",
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const SizedBox(
+                      height: 600,
+                      width: 320,
+                      child: JankenPage(),
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    const Text(
-                      "あっち向いてホイ",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    const SizedBox(
+                      height: 50,
                     ),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () async {
-                          await launchUrlString(
-                              "https://github.com/Hiroki1111/attimuitehoi");
-                        },
-                        child: Image.asset(
-                          'assets/images/attimuitehoi_image.png',
-                          width: 600,
-                          height: 600,
-                        ),
+                    InkWell(
+                      onTap: () {
+                        launchUrlString(
+                            "https://github.com/Hiroki1111/attimuitehoi");
+                      },
+                      child: const Text(
+                        "あっち向いてホイ",
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const SizedBox(
+                      height: 600,
+                      width: 320,
+                      child: AttimuitehoiPage(),
                     ),
                   ],
                 ),
@@ -216,6 +223,306 @@ class PortfolioPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// じゃんけん
+class JankenPage extends StatefulWidget {
+  const JankenPage({super.key});
+
+  @override
+  State<JankenPage> createState() => _JankenPageState();
+}
+
+class _JankenPageState extends State<JankenPage> {
+  // 変数はここに書く
+  String myHand = "👊";
+  String completerHand = "👊";
+  String result = "引き分け";
+  String judgePrint = "";
+  int judgeCount = 0;
+  int winCount = 0;
+  int loseCount = 0;
+  int drawCount = 0;
+
+  void selectHand(String selectedHand) {
+    myHand = selectedHand;
+    print(myHand);
+    generateCompleterHand();
+    judge();
+    judgeCounter();
+    winCounter();
+    loseCounter();
+    drawCounter();
+    judgePrinter();
+    setState(() {});
+  }
+
+  void generateCompleterHand() {
+    final randomNumber = Random().nextInt(3);
+    completerHand = randomNumberToHand(randomNumber);
+  }
+
+  String randomNumberToHand(int randomNumber) {
+    switch (randomNumber) {
+      case 0:
+        return "👊";
+      case 1:
+        return "✌︎";
+      case 2:
+        return "🖐";
+      default:
+        return "👊";
+    }
+  }
+
+  void judge() {
+    // 引き分けの場合
+    if (myHand == completerHand) {
+      result = "引き分け";
+    } else if (myHand == "👊" && completerHand == "✌️" ||
+        myHand == "✌️" && completerHand == "🖐" ||
+        myHand == "🖐" && completerHand == "👊") {
+      result = "勝ち";
+    } else {
+      result = "負け";
+    }
+  }
+
+  void judgeCounter() {
+    judgePrint = "";
+    judgeCount++;
+    if (judgeCount == 5) {
+      judgePrinter();
+      myHand = "👊";
+      completerHand = "👊";
+      result = "引き分け";
+      judgeCount = 0;
+      winCount = 0;
+      loseCount = 0;
+      drawCount = 0;
+    }
+  }
+
+  void winCounter() {
+    if (result == "勝ち") {
+      winCount++;
+    }
+  }
+
+  void loseCounter() {
+    if (result == "負け") {
+      loseCount++;
+    }
+  }
+
+  void drawCounter() {
+    if (result == "引き分け") {
+      drawCount++;
+    }
+  }
+
+  void judgePrinter() {
+    if (judgeCount == 4) {
+      judgePrint = "5戦$winCount勝$loseCount敗$drawCount分";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("じゃんけん"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              judgePrint,
+              style: const TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            const SizedBox(height: 48),
+            Text(
+              result,
+              style: const TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            const SizedBox(height: 48),
+            Text(
+              completerHand,
+              style: const TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            const SizedBox(height: 48),
+            Text(
+              myHand,
+              style: const TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    selectHand("👊");
+                  },
+                  child: const Text("👊"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    selectHand("✌️");
+                  },
+                  child: const Text("✌️"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    selectHand("🖐");
+                  },
+                  child: const Text("🖐"),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// あっち向いてホイ
+class AttimuitehoiPage extends StatefulWidget {
+  const AttimuitehoiPage({super.key});
+
+  @override
+  State<AttimuitehoiPage> createState() => _AttimuitehoiPageState();
+}
+
+class _AttimuitehoiPageState extends State<AttimuitehoiPage> {
+  String myHand = "↑";
+  String completerHand = "↑";
+  String result = "";
+  String kaihiPrint = "スタート";
+  int kaihiCount = 0;
+
+  void selectHand(String selectedHand) {
+    myHand = selectedHand;
+    print(myHand);
+    generateCompleteHand();
+    judge();
+    kaihiCounter();
+    kaihiPrinter();
+    setState(() {});
+  }
+
+  void generateCompleteHand() {
+    final randomNumber = Random().nextInt(4);
+    completerHand = randomNumberToHand(randomNumber);
+  }
+
+  String randomNumberToHand(int randomNumber) {
+    switch (randomNumber) {
+      case 0:
+        return '↑';
+      case 1:
+        return '↓';
+      case 2:
+        return '→';
+      case 3:
+        return '←';
+      default:
+        return '↑';
+    }
+  }
+
+  void judge() {
+    if (myHand == completerHand) {
+      result = "回避失敗";
+    } else {
+      result = "回避成功";
+    }
+  }
+
+  void kaihiCounter() {
+    kaihiCount++;
+    if (result == "回避失敗") {
+      kaihiPrint = "スタート";
+      kaihiCount = 0;
+    }
+  }
+
+  void kaihiPrinter() {
+    kaihiPrint = "回避成功回数$kaihiCount回";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("あっち向いてホイ"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              kaihiPrint,
+              style: const TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            Text(
+              completerHand,
+              style: const TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            Text(
+              myHand,
+              style: const TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    selectHand("↑");
+                  },
+                  child: const Text("↑"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    selectHand("↓");
+                  },
+                  child: const Text("↓"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    selectHand("→");
+                  },
+                  child: const Text("→"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    selectHand("←");
+                  },
+                  child: const Text("←"),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
