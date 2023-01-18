@@ -83,7 +83,7 @@ class PortfolioPage extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 80,
+            height: 10,
           ),
           Container(
             color: const Color.fromARGB(255, 232, 229, 229),
