@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -23,7 +24,21 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: PortfolioPage(),
-      // home: index(),
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        maxWidth: 1200,
+        minWidth: 480,
+        defaultScale: true,
+        breakpoints: [
+          const ResponsiveBreakpoint.resize(480, name: MOBILE),
+          const ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          const ResponsiveBreakpoint.autoScale(1000, name: DESKTOP),
+        ],
+        background: Container(
+          color: const Color.fromARGB(255, 255, 255, 255),
+        ),
+      ),
+      initialRoute: "/",
     );
   }
 }
@@ -34,6 +49,10 @@ class PortfolioPage extends StatelessWidget {
   final _controller = AutoScrollController();
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    print(screenWidth);
+
     final items = [
       // About
       Column(
@@ -48,21 +67,39 @@ class PortfolioPage extends StatelessWidget {
           const SizedBox(
             height: 80,
           ),
-          Row(
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Container(
-                width: 60,
+              Padding(
+                padding: const EdgeInsets.all(32),
+                child: Image.asset(
+                  'assets/images/profile_image.png',
+                  width: 400,
+                ),
               ),
-              Image.asset(
-                'assets/images/profile_image.png',
+              SizedBox(
                 width: 400,
-              ),
-              Column(
-                children: const [
-                  Text('○○○○'),
-                  Text('○○○○'),
-                  Text('○○○○'),
-                ],
+                child: Column(
+                  children: [
+                    const Text(
+                      'Account',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        launchUrlString("https://github.com/Hiroki1111");
+                      },
+                      child: const Text(
+                        "GitHub",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ],
           ),
@@ -85,144 +122,264 @@ class PortfolioPage extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Container(
-            color: const Color.fromARGB(255, 232, 229, 229),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        launchUrlString("https://github.com/Hiroki1111/janken");
-                      },
-                      child: const Text(
-                        "じゃんけん",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+          if (screenWidth > 700)
+            Container(
+              color: const Color.fromARGB(255, 232, 229, 229),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const SizedBox(
-                      height: 600,
-                      width: 320,
-                      child: JankenPage(),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        launchUrlString(
-                            "https://github.com/Hiroki1111/attimuitehoi");
-                      },
-                      child: const Text(
-                        "あっち向いてホイ",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                      InkWell(
+                        onTap: () {
+                          launchUrlString(
+                              "https://github.com/Hiroki1111/janken");
+                        },
+                        child: const Text(
+                          "じゃんけん",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const SizedBox(
-                      height: 600,
-                      width: 320,
-                      child: AttimuitehoiPage(),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const SizedBox(
+                        height: 600,
+                        width: 320,
+                        child: JankenPage(),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          launchUrlString(
+                              "https://github.com/Hiroki1111/attimuitehoi");
+                        },
+                        child: const Text(
+                          "あっち向いてホイ",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const SizedBox(
+                        height: 600,
+                        width: 320,
+                        child: AttimuitehoiPage(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          else
+            Container(
+              color: const Color.fromARGB(255, 232, 229, 229),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              launchUrlString(
+                                  "https://github.com/Hiroki1111/janken");
+                            },
+                            child: const Text(
+                              "じゃんけん",
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const SizedBox(
+                            height: 600,
+                            width: 320,
+                            child: JankenPage(),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              launchUrlString(
+                                  "https://github.com/Hiroki1111/attimuitehoi");
+                            },
+                            child: const Text(
+                              "あっち向いてホイ",
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const SizedBox(
+                            height: 600,
+                            width: 320,
+                            child: AttimuitehoiPage(),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     ];
     return Scaffold(
-      body: Column(
-        children: [
-          // ヘッダー
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  Image.asset(
-                    'assets/images/logo_image.png',
-                    width: 250,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  // InkWell:テキストをボタンにできる
-                  InkWell(
-                    onTap: () {
-                      _controller.scrollToIndex(
-                        0,
-                        // ボタンを押したら上にスクロール
-                        preferPosition: AutoScrollPosition.begin,
-                      );
-                    },
-                    child: const Text(
-                      'About',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _controller.scrollToIndex(
-                        1,
-                        preferPosition: AutoScrollPosition.begin,
-                      );
-                    },
-                    child: const Text(
-                      'Creates',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              controller: _controller,
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return AutoScrollTag(
-                    key: ValueKey(index),
-                    controller: _controller,
-                    index: index,
-                    child: items[index]);
+      endDrawer: Drawer(
+        // InkWell:テキストをボタンにできる
+        child: Column(
+          children: [
+            InkWell(
+              onTap: () {
+                _controller.scrollToIndex(
+                  0,
+                  // ボタンを押したら上にスクロール
+                  preferPosition: AutoScrollPosition.begin,
+                );
               },
+              child: const Text(
+                'About',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
             ),
-          ),
-        ],
+            InkWell(
+              onTap: () {
+                _controller.scrollToIndex(
+                  1,
+                  preferPosition: AutoScrollPosition.begin,
+                );
+              },
+              child: const Text(
+                'Creates',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            // ヘッダー
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/logo_image.png',
+                      width: 250,
+                    ),
+                  ],
+                ),
+                if (screenWidth > 520)
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          _controller.scrollToIndex(
+                            0,
+                            // ボタンを押したら上にスクロール
+                            preferPosition: AutoScrollPosition.begin,
+                          );
+                        },
+                        child: const Text(
+                          'About',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _controller.scrollToIndex(
+                            1,
+                            preferPosition: AutoScrollPosition.begin,
+                          );
+                        },
+                        child: const Text(
+                          'Creates',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 50,
+                      ),
+                    ],
+                  )
+                else
+                  Builder(
+                    builder: (context) {
+                      return Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                Scaffold.of(context).openEndDrawer();
+                              },
+                              icon: const Icon(Icons.dehaze_rounded)),
+                        ],
+                      );
+                    },
+                  ),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                controller: _controller,
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return AutoScrollTag(
+                      key: ValueKey(index),
+                      controller: _controller,
+                      index: index,
+                      child: items[index]);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
