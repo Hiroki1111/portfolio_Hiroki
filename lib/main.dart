@@ -64,8 +64,8 @@ class PortfolioPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(
-            height: 80,
+          Container(
+            height: 40,
           ),
           Wrap(
             alignment: WrapAlignment.center,
