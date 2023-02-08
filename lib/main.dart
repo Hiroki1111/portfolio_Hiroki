@@ -249,6 +249,13 @@ class PortfolioPage extends StatelessWidget {
                 ],
               ),
             ),
+          Container(
+            color: const Color.fromARGB(255, 232, 229, 229),
+            height: 30,
+          ),
+          const SizedBox(
+            height: 30,
+          )
         ],
       ),
     ];
